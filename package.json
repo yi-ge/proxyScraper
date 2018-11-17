@@ -8,5 +8,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "proxy-verifier": "^0.4.0",
+    "puppeteer": "^1.10.0"
+  }
 }
