@@ -1,5 +1,9 @@
 const ProxyVerifier = require('proxy-verifier');
 const puppeteer = require('puppeteer');
+const util = require('util');
+
+let good = [];
+let bad = [];
 
 const scrape = async () => {
   const browser = await puppeteer.launch({
@@ -13,31 +17,44 @@ const scrape = async () => {
 
   let matches = proxies.match(regex);
   let result;
-  try {
-    result = await checkIP(matches[0]);
-    console.log('output is', result);
-  } catch (err) {
-    console.log(err);
+  // result = await checkIP(matches[0]);
+  // console.log('output is', result);
+  for (let i = 0; i < 50; i++) {
+    checkIP(matches[i]);
   }
 };
 
-const checkIP = async ipAddress => {
-  return new Promise((resolve, reject) => {
-    let split = ipAddress.split(':');
-    let proxy = {
-      ipAddress: split[0],
-      port: split[1],
-      protocols: ['http', 'https', 'socks4', 'socks5'],
-    };
+const checkIP = ipAddress => {
+  // return new Promise((resolve, reject) => {
+  let split = ipAddress.split(':');
+  let proxy = {
+    ipAddress: split[0],
+    port: split[1],
+    protocols: ['http', 'https', 'socks4', 'socks5'],
+  };
 
-    ProxyVerifier.testAll(proxy, (error, result) => {
-      if (error) {
-        resolve(error);
+  ProxyVerifier.testAll(proxy, (error, result) => {
+    if (error) {
+      // console.log('error', error);
+      // resolve(error);
+    } else {
+      if (result.anonymityLevel != null) {
+        console.log('result: good');
+        // ONLY INSTANCE OF GOOD RESULT
       } else {
-        resolve(result);
+        console.log(
+          'result',
+          util.inspect(result.protocols.http),
+          util.inspect(result.protocols.https),
+          util.inspect(result.protocols.socks4),
+          util.inspect(result.protocols.socks5)
+        );
+        // }
+        // resolve(result);
       }
-    });
+    }
   });
+  // });
 };
 
 scrape();
