@@ -12,20 +12,15 @@ const checkIP = ipAddress => {
 
     ProxyVerifier.testAll(proxy, (error, result) => {
       if (error) {
-        // console.log('error', error);
-        // resolve(error);
         console.log('there would have been an error');
         resolve(false);
+      } else if (result.anonymityLevel != null) {
+        console.log('result: good', ipAddress);
+        // ONLY INSTANCE OF GOOD RESULT
+        resolve(true);
       } else {
-        if (result.anonymityLevel != null) {
-          console.log('result: good', ipAddress);
-          // ONLY INSTANCE OF GOOD RESULT
-          resolve(true);
-        } else {
-          console.log('there would have been an error');
-          // resolve(result);
-          resolve(false);
-        }
+        console.log('there would have been an error');
+        resolve(false);
       }
     });
   });
@@ -42,26 +37,3 @@ for (let i = 0; i < list.length; i++) {
     }
   })();
 }
-
-//   return ProxyVerifier.testAll(proxy, (error, result) => {
-//     if (error) {
-//       // console.log('error', error);
-//       // resolve(error);
-//       console.log('there would have been an error', ipAddress);
-//       return false;
-//     } else if (result.anonymityLevel != null) {
-//       // console.log('result: good', result);
-//       // ONLY INSTANCE OF GOOD RESULT
-//       return true;
-//     } else {
-//       console.log('there would have been an error', ipAddress);
-//       // resolve(result);
-//       return false;
-//     }
-//   });
-//   // console.log(`result for ${ipAddress} is ${result}`);
-//   // return result;
-//   // });
-// };
-
-// console.log('confirming workerData', workerData);
